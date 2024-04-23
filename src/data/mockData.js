@@ -1,3 +1,4 @@
+import { green } from "@mui/material/colors";
 import { tokens } from "../theme";
 
 export const mockDataTeam = [
@@ -351,34 +352,65 @@ export const mockBarData = [
 
 export const mockPieData = [
   {
-    id: "hack",
-    label: "hack",
-    value: 239,
-    color: "hsl(104, 70%, 50%)",
+    id: "THÁNG 1",
+    label: `THÁNG 1 : ${parseInt("34000000").toLocaleString("en-US")} VND`,
+    value: 34000000,
   },
   {
-    id: "make",
-    label: "make",
-    value: 170,
-    color: "hsl(162, 70%, 50%)",
+    id: "2024-03",
+    label: 3640000,
+    value: 3640000,
   },
   {
-    id: "go",
-    label: "go",
-    value: 322,
-    color: "hsl(291, 70%, 50%)",
+    id: "2024-04",
+    label: 1840000,
+    value: 1840000,
   },
   {
-    id: "lisp",
-    label: "lisp",
-    value: 503,
-    color: "hsl(229, 70%, 50%)",
+    id: "THÁNG 4",
+    label: "THÁNG 4 : 50970000",
+    value: 50970000,
   },
   {
-    id: "scala",
-    label: "scala",
-    value: 584,
-    color: "hsl(344, 70%, 50%)",
+    id: "THÁNG 5",
+    label: "THÁNG 5 : 42000000",
+    value: 42000000,
+  },
+  {
+    id: "THÁNG 6",
+    label: "THÁNG 6 : 20000000",
+    value: 25000000,
+  },
+
+  {
+    id: "THÁNG 7",
+    label: "THÁNG 7 : 23000000",
+    value: 43000000,
+  },
+  {
+    id: "THÁNG 8",
+    label: "THÁNG 8 : 17000000",
+    value: 17000000,
+  },
+  {
+    id: "THÁNG 9",
+    label: "THÁNG 9 : 45000000",
+    value: 45000000,
+  },
+  {
+    id: "THÁNG 10",
+    label: "THÁNG 10 : 80000000",
+    value: 80000000,
+  },
+  {
+    id: "THÁNG 11",
+    label: "THÁNG 11 : 16000000",
+    value: 16000000,
+  },
+  {
+    id: "THÁNG 12",
+    label: "THÁNG 12 : 62000000",
+    value: 62000000,
   },
 ];
 

@@ -764,6 +764,8 @@ const ChamCong = () => {
         };
         data.push(object);
       }
+      setSelectRowTimekeeps([]);
+      setSelectionModelTimeKeep([]);
     });
     // Tạo một workbook mới
     const workbook = new ExcelJS.Workbook();

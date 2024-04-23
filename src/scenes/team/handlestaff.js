@@ -71,6 +71,24 @@ export const HandleDeletedStaff = async (req) => {
   return respod.data;
 };
 
+export const HandleDeletedStaffOff = async (req) => {
+  const respod = await Axios.post(
+    `${Url_BackEnd}/staffoff/deletedstaff`,
+    {
+      id: req,
+    },
+    {
+      headers: {
+        "Content-Type": "application/json",
+        // Thêm các header khác nếu cần
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    }
+  );
+
+  return respod.data;
+};
+
 export const HandleCreateStaffOff = async (req) => {
   const respod = await Axios.post(
     `${Url_BackEnd}/staffoff/create`,

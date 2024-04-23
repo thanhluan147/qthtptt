@@ -436,7 +436,8 @@ const Form = () => {
 
       chinhanhdau = JSON.parse(resolvedResult)[0].id;
       code = JSON.parse(resolvedResult)[0].code;
-
+      console.log("chi nhanh dau " + chinhanhdau);
+      console.log("codee " + code);
       setchinhanhdau(chinhanhdau);
       setstateCode(code);
     } else {
@@ -444,7 +445,8 @@ const Form = () => {
 
       chinhanhdau = JSON.parse(objBranch)[0].id;
       code = JSON.parse(objBranch)[0].code;
-
+      console.log("chi nhanh dau " + chinhanhdau);
+      console.log("codee " + code);
       setchinhanhdau(chinhanhdau);
       setstateCode(code);
     }

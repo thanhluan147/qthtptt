@@ -21,8 +21,8 @@ const LineChart = ({
   const handleMockdata = () => {
     const transformedData = stateDoanhthu.map((item) => {
       let temp =
-        item.thoidiem.split(" ")[0].split("-")[1] +
-        "-" +
+        // item.thoidiem.split(" ")[0].split("-")[1] +
+        // "-" +
         item.thoidiem.split(" ")[0].split("-")[2];
       return {
         ...item,

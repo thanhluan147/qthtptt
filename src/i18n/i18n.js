@@ -6,6 +6,20 @@ i18n.use(initReactI18next).init({
   resources: {
     vi: {
       translation: {
+        //other
+        OT_BANGCHAMCONG: "Bảng chấm công",
+        OT_CHOTCONG: "Chốt công",
+        OT_HUYCONG: "Hủy công",
+        OT_CSLDL: "Chọn số lượng dữ liệu sau đó bấm check",
+        OT_KIEMTRASOGIODALAM: "Kiểm tra số giờ đã làm",
+        OT_NHANVIENDANGHI: "Nhân viên đã nghỉ",
+        OT_TAOBANGCHAMCONG: "Tạo bảng chấm công",
+        OT_GIOVAO: "Giờ vào",
+        OT_GIORA: "Giờ ra",
+        OT_TONGSOGIOLAM: "Tổng số giờ làm",
+        OT_NGAYCHAMCONG: "Ngày chấm công",
+        OT_KHOIPHUCNV: "Khôi phục nhân viên",
+        //
         QLNV: "Quản lý nhân viên",
         QLCNHANH: "Quản Lý chi nhánh",
         QLK: "Quản lý kho",
@@ -86,8 +100,8 @@ i18n.use(initReactI18next).init({
 
         //NHẬP KHO
         ERROR_PHIEU: "*Vui lòng chọn loại phiếu",
-        ERROR_DATEFORM: "*Kiểu dử liệu phải là YYYY-MM-DD",
-        ERROR_DULIEU: "*chưa có dử liệu, không thể gửi",
+        ERROR_DATEFORM: "*Kiểu dữ liệu phải là YYYY-MM-DD",
+        ERROR_DULIEU: "*chưa có dữ liệu, không thể gửi",
         TITLENHAPKHO: "Nhập kho",
         DESNHAPKHO: "Quản lý nhập kho",
         MAKHO_NP: "Mã phiếu lập",
@@ -175,8 +189,8 @@ i18n.use(initReactI18next).init({
 
         //Nhập kho
         ERROR_PHIEU: "*Vui lòng chọn loại phiếu",
-        ERROR_DATEFORM: "*Kiểu dử liệu phải là YYYY-MM-DD",
-        ERROR_DULIEU: "*chưa có dử liệu, không thể gửi",
+        ERROR_DATEFORM: "*Kiểu dữ liệu phải là YYYY-MM-DD",
+        ERROR_DULIEU: "*chưa có dữ liệu, không thể gửi",
 
         TITLENHAP: "Gửi yêu cầu Nhập sản phẩm",
         TONGSOTIEN_NHAP: "Tổng số tiền",
@@ -229,6 +243,21 @@ i18n.use(initReactI18next).init({
     },
     ko: {
       translation: {
+        //other
+        OT_BANGCHAMCONG: "출근부",
+        OT_CHOTCONG: "결근",
+        OT_HUYCONG: "취소 출근",
+        OT_CSLDL: "데이터 양을 선택한 다음 체크를 누르세요",
+        OT_KIEMTRASOGIODALAM: "근무 시간 확인",
+        OT_NHANVIENDANGHI: "휴가한 직원",
+        OT_TAOBANGCHAMCONG: "출근부 만들기",
+        OT_GIOVAO: "출근 시간",
+        OT_GIORA: "퇴근 시간",
+        OT_TONGSOGIOLAM: "총 근로 시간",
+        OT_NGAYCHAMCONG: "출근일",
+        OT_KHOIPHUCNV: "직원 복구",
+        GHICHU: "메모",
+        //
         HINHANHTRC: "앞면 사진",
         HINHANHSAU: "뒷면 사진",
         DES_ALERT_NP_H: "요청 취소로 상태 변경",

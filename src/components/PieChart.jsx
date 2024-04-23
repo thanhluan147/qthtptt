@@ -3,12 +3,27 @@ import { tokens } from "../theme";
 import { useTheme } from "@mui/material";
 import { mockPieData as data } from "../data/mockData";
 
-const PieChart = () => {
+const PieChart = ({ mockdata }) => {
   const theme = useTheme();
+  const colorsForMonths = [
+    "#e6194b", // Tháng 1 - Màu đỏ
+    "#3cb44b", // Tháng 2 - Màu xanh lá cây
+    "#ffe119", // Tháng 3 - Màu vàng
+    "#4363d8", // Tháng 4 - Màu xanh dương
+    "#f58231", // Tháng 5 - Màu cam
+    "#911eb4", // Tháng 6 - Màu tím
+    "#46f0f0", // Tháng 7 - Màu ngọc lam
+    "#f032e6", // Tháng 8 - Màu hồng
+    "#bcf60c", // Tháng 9 - Màu xanh lục
+    "#fabebe", // Tháng 10 - Màu hồng nhạt
+    "#008080", // Tháng 11 - Màu teal
+    "#e6beff", // Tháng 12 - Màu tím nhạt
+  ];
   const colors = tokens(theme.palette.mode);
   return (
     <ResponsivePie
-      data={data}
+      colors={colorsForMonths}
+      data={mockdata}
       theme={{
         axis: {
           domain: {
@@ -80,23 +95,23 @@ const PieChart = () => {
       legends={[
         {
           anchor: "bottom",
-          direction: "row",
+          direction: "column",
           justify: false,
-          translateX: 0,
-          translateY: 56,
+          translateX: 500,
+          translateY: 40,
           itemsSpacing: 0,
-          itemWidth: 100,
-          itemHeight: 18,
-          itemTextColor: "#999",
+          itemWidth: 120,
+          itemHeight: 25,
+          itemTextColor: "#e0e0e0",
           itemDirection: "left-to-right",
           itemOpacity: 1,
-          symbolSize: 18,
+          symbolSize: 20,
           symbolShape: "circle",
           effects: [
             {
               on: "hover",
               style: {
-                itemTextColor: "#000",
+                itemTextColor: "#4cceac",
               },
             },
           ],

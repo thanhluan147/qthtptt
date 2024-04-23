@@ -19,6 +19,9 @@ import {
   Get_all_STAFFOFF_By_branchID,
   Get_all_branch,
 } from "./handlebranch";
+import { confirmAlert } from "react-confirm-alert";
+
+import Loading from "react-loading";
 import "./style.css";
 import HandleAccessAccount from "../handleAccess/handleAccess";
 import { HandleCreateTimekeeps } from "./handleTimekeeps";
@@ -27,6 +30,7 @@ import {
   HandleDeletedStaff,
   HandleEditStaff,
   HandleCreateStaffOff,
+  HandleDeletedStaffOff,
 } from "./handlestaff";
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
@@ -50,6 +54,7 @@ const Team = () => {
   const [stateimageTwoFileNameEdit, setStateimgTwoFileNameEdit] = useState("");
   const [stateViewimg, setstateViewimg] = useState("");
   const [isloading, setIsloading] = useState(false);
+  const [isloadingDeleted, setIsloadingDeleted] = useState(false);
   const [stateTimekeep, setStateTimekeep] = useState([]);
   const [ischecked, setIschecked] = useState(false);
   const [selectedOption, setSelectedOption] = useState(""); // State để theo dõi giá trị được chọn trong select
@@ -323,28 +328,28 @@ const Team = () => {
     // },
     {
       field: "staffName",
-      headerName: `TÊN NHÂN VIÊN`,
+      headerName: `${i18n.t("TNV_TEAM").toLocaleUpperCase()}`,
       flex: 1,
       cellClassName: "name-column--cell",
       editable: true,
     },
     {
       field: "startCheck",
-      headerName: `GIỜ VÀO`,
+      headerName: `${i18n.t("OT_GIOVAO").toLocaleUpperCase()}`,
       flex: 1,
       cellClassName: "name-column--cell",
       editable: true,
     },
     {
       field: "endCheck",
-      headerName: `GIỜ RA`,
+      headerName: `${i18n.t("OT_GIORA").toLocaleUpperCase()}`,
       flex: 1,
       cellClassName: "name-column--cell",
       editable: true,
     },
     {
       field: "Total",
-      headerName: `TỔNG SỐ GIỜ`,
+      headerName: `${i18n.t("OT_TONGSOGIOLAM").toLocaleUpperCase()}`,
       flex: 1,
       renderCell: converToHHandMM,
       cellClassName: "name-column--cell",
@@ -352,7 +357,7 @@ const Team = () => {
     },
     {
       field: "createDate",
-      headerName: `NGÀY CHẤM CÔNG`,
+      headerName: `${i18n.t("OT_NGAYCHAMCONG").toLocaleUpperCase()}`,
       flex: 1,
       cellClassName: "name-column--cell",
       renderCell: ChamCong,
@@ -361,7 +366,7 @@ const Team = () => {
 
     {
       field: "reason",
-      headerName: `GHI CHÚ`,
+      headerName: `${i18n.t("GHICHU").toLocaleUpperCase()}`,
       flex: 2,
       cellClassName: "name-column--cell p-0",
       // renderCell: GhiChu,
@@ -376,6 +381,8 @@ const Team = () => {
   const [selectionModelTimeKeep, setSelectionModelTimeKeep] = React.useState(
     []
   );
+  const [selectionModelOff, setSelectionModelOff] = React.useState([]);
+  const [selectRowOff, setSelectRowOff] = useState([]);
   const [stateStaffImport, setStateStaffImport] = React.useState([]);
   const [selectedRow, setSelectedRow] = React.useState([]);
   const [selectedRowTimekeeps, setSelectRowTimekeeps] = React.useState([]);
@@ -387,7 +394,67 @@ const Team = () => {
     setSelectedRow(selectedRows);
     setSelectionModel(newSelectionModel);
   };
+  const showAlertHuy = async () => {
+    if (selectionModelOff.length === 0) {
+      alert("Hãy chọn dữ liệu xóa !!!!");
+      return;
+    }
 
+    setIsloadingDeleted(true);
+    confirmAlert({
+      title: `Xóa nhân viên khỏi hệ thống`,
+      message: `Bạn có chắc là xóa chứ ???`,
+
+      buttons: [
+        {
+          label: "Yes",
+          onClick: async () => {
+            try {
+              const dataDeleted = selectionModelOff.map(async (item) => {
+                await HandleDeletedStaffOff(item);
+              });
+              await Promise.all(dataDeleted);
+              setSelectionModelOff([]);
+              await fetchingGettAllStaftOff_by_branchID(statechinhanh);
+              setIsloadingDeleted(false);
+            } catch (error) {
+              console.log(error);
+            }
+          },
+        },
+        {
+          label: "No",
+          onClick: () => alert(`${i18n.t("CLICKNO_NP")}`),
+        },
+      ],
+    });
+  };
+  const kiemTraTonTaiId = (A, B) => {
+    return A.some((itemA) => B.some((itemB) => itemB.id === itemA.id));
+  };
+  const undostaff = async () => {
+    try {
+      if (kiemTraTonTaiId(stateStaff, selectRowOff)) {
+        alert(
+          "Không thể khôi phục, vì nhân viên này hiện tại đã có trong hệ thống !!!!"
+        );
+        return;
+      }
+      const dataDeleted = selectionModelOff.map(async (item) => {
+        await HandleDeletedStaffOff(item);
+      });
+
+      const undoastaffchoose = selectRowOff.map(async (item) => {
+        await HandleCreateStaff(item);
+      });
+      await Promise.all(dataDeleted, undoastaffchoose);
+      alert("Khôi phục dữ liệu thành công !!!");
+      await fetchingGettAllStaft_by_branchID(statechinhanh);
+      await fetchingGettAllStaftOff_by_branchID(statechinhanh);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const handleSelectionModelChangeTimekeep = (newSelectionModel) => {
     const selectedRows = newSelectionModel.map((selectedId) =>
       stateTimekeep.find((row) => row.id === selectedId)
@@ -395,6 +462,15 @@ const Team = () => {
 
     setSelectRowTimekeeps(selectedRows);
     setSelectionModelTimeKeep(newSelectionModel);
+  };
+  const handleSelectionModelChangeOff = (newSelectionModel) => {
+    const selectedRows = newSelectionModel.map((selectedId) =>
+      stateStaffOff.find((row) => row.id === selectedId)
+    );
+
+    setSelectRowOff(selectedRows);
+
+    setSelectionModelOff(newSelectionModel);
   };
   const handleEditCellChange = (params) => {
     const keys = Object.keys(params);
@@ -585,6 +661,11 @@ const Team = () => {
   };
   const handleSaveClick = async () => {
     try {
+      if (kiemTraTonTaiId(stateStaffOff, selectedRow)) {
+        alert("Xóa thất bại, nhân viên này đã từng bị xóa và đang tồn tại !!!");
+        return;
+      }
+
       setIsloading(true);
       const selectedRows = stateStaff.filter((row) =>
         selectionModel.includes(row.id)
@@ -883,16 +964,15 @@ const Team = () => {
         chinhanhdau = JSON.parse(resolvedResult)[0].branchID;
       } else {
         // Nếu không phải là promise, cập nhật state ngay lập tức
-
         setStateBranch(JSON.parse(objBranch));
         chinhanhdau = JSON.parse(objBranch)[0].branchID;
       }
     } else {
       const objBranch = Get_all_branch_By_userid();
+
       if (objBranch instanceof Promise) {
         // Nếu là promise, chờ promise hoàn thành rồi mới cập nhật state
         const resolvedResult = await objBranch;
-
         setStateBranch(JSON.parse(resolvedResult));
         chinhanhdau = JSON.parse(resolvedResult)[0].branchID;
       } else {
@@ -917,7 +997,6 @@ const Team = () => {
 
       setStateTimekeep(JSON.parse(resolvedResult));
     } else {
-      console.log("check objBranch " + JSON.stringify(objBranch));
       setStateTimekeep(JSON.parse(objBranch));
     }
   };
@@ -1328,7 +1407,7 @@ const Team = () => {
           class="btn btn-success"
           onClick={createTimekeepings}
         >
-          Tạo bảng chấm công
+          {i18n.t("OT_TAOBANGCHAMCONG")}
         </button>
         <div
           class="modal fade"
@@ -1826,7 +1905,10 @@ const Team = () => {
       {/* Nhân viên đã nghĩ */}
 
       <Box ml="50px" mt="100px">
-        <Header title="BẢNG CHẤM CÔNG" subtitle={i18n.t("DESTEAM")} />
+        <Header
+          title={i18n.t("OT_BANGCHAMCONG")}
+          subtitle={i18n.t("DESTEAM")}
+        />
         <Box
           display="grid"
           gridTemplateColumns="repeat(12, 1fr)"
@@ -1836,7 +1918,7 @@ const Team = () => {
           <Box>
             <div className="date-picker-container">
               <label className="date-picker-label" htmlFor="dateF">
-                Ngày bắt đầu:
+                {i18n.t("NGAYBD").toLocaleLowerCase()}:
               </label>
               <DatePicker
                 id="dateF"
@@ -1851,7 +1933,7 @@ const Team = () => {
           <Box>
             <div className="date-picker-container">
               <label className="date-picker-label" htmlFor="dateT">
-                Ngày kết thúc :
+                {i18n.t("NGAYKT").toLocaleLowerCase()}:
               </label>
               <DatePicker
                 id="dateT"
@@ -1883,7 +1965,8 @@ const Team = () => {
               onClick={handleCheckButtonClickTwo}
             >
               {" "}
-              <AddAlarmIcon></AddAlarmIcon>Chốt công
+              <AddAlarmIcon></AddAlarmIcon>
+              {i18n.t("OT_CHOTCONG")}
             </button>
 
             <button
@@ -1898,7 +1981,7 @@ const Team = () => {
               onClick={HuyCong}
             >
               {" "}
-              Hủy công
+              {i18n.t("OT_HUYCONG")}
             </button>
           </Box>
           <Box display="flex">
@@ -1920,15 +2003,13 @@ const Team = () => {
           </Box> */}
         </Box>
         <Box>
-          <label htmlFor="checkG">
-            *Chọn số lượng dử liệu sau đó bấm check
-          </label>
+          <label htmlFor="checkG">*{i18n.t("OT_CSLDL")}</label>
           <br></br>
           <input
             type="text"
             name="checkG"
             value={totalTimeCheck}
-            placeholder="Kiểm tra số giờ làm"
+            placeholder={i18n.t("OT_KIEMTRASOGIODALAM")}
           ></input>
           <button onClick={checkHour}>Check</button>
         </Box>
@@ -2050,11 +2131,37 @@ const Team = () => {
           },
         }}
       >
-        <Header title="NHÂN VIÊN ĐÃ NGHỈ"></Header>
+        <Header
+          title={i18n.t("OT_NHANVIENDANGHI").toLocaleUpperCase()}
+        ></Header>
+
+        {isloadingDeleted ? (
+          <Loading></Loading>
+        ) : (
+          <>
+            {" "}
+            <Box display="flex">
+              <button onClick={showAlertHuy} className="btn btn-danger">
+                {i18n.t("XOANV").toLocaleUpperCase()}
+              </button>
+
+              <button
+                onClick={undostaff}
+                className="btn text-primary-emphasis btn-warning ms-2 "
+              >
+                {i18n.t("OT_KHOIPHUCNV").toLocaleUpperCase()}
+              </button>
+            </Box>
+          </>
+        )}
+
         <DataGrid
           components={{
             Toolbar: GridToolbar,
           }}
+          checkboxSelection
+          selectionModel={selectionModelOff}
+          onSelectionModelChange={handleSelectionModelChangeOff}
           pageSize={10}
           rows={stateStaffOff}
           columns={columns}

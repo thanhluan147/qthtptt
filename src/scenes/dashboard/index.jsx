@@ -20,6 +20,8 @@ import SendIcon from "@mui/icons-material/Send";
 import LineChart from "../../components/LineChart";
 import GeographyChart from "../../components/GeographyChart";
 import BarChart from "../../components/BarChart";
+import PieChart from "../../components/PieChart";
+
 import StatBox from "../../components/StatBox";
 import "./style.css";
 import ProgressCircle from "../../components/ProgressCircle";
@@ -38,7 +40,10 @@ import { GET_Notifi_BY_ID, Update_Notifi_By_id } from "./handlenotifi";
 import Url_realtime from "../../URL_REALTIME";
 import { converToName } from "../method";
 import { GET_ALLDEBTOR_BY_Debtor_Year_month } from "../debtor/handleDebtor";
-
+import {
+  GET_ALL_MONEY_BY_STOREID_THOIDIEM_OF_DOANHTHU,
+  GET_ALL_MONEY_BY_STOREID_THOIDIEM_OF_PHIEUSTORE,
+} from "./handledashboard";
 var socket = io(`${Url_realtime}`, {
   transports: ["websocket", "polling", "flashsocket"],
 });
@@ -62,6 +67,9 @@ const Dashboard = () => {
   const [stateCheckaccess, setstateCheckaccess] = useState(false);
   const [min, setmin] = useState(0);
   const [max, setmax] = useState(0);
+  const [mockdataBan, setMockdataBan] = useState([]);
+
+  const [mockdataNhapKho, setMockdataNhapKho] = useState([]);
   const [statesotienBAN, setstatesotienBAN] = useState(0);
   const textAreaRef = useRef();
   const handleInputChange = (e) => {
@@ -239,6 +247,7 @@ const Dashboard = () => {
         });
 
         setstateCostBuy(sumallSotienNhapKho);
+
         setstateCostBuyThucTe(sumallSotienNhapKhoTT);
       } else {
         let sumallSotienNhapKho = 0;
@@ -358,21 +367,68 @@ const Dashboard = () => {
       setTextAreaValue(formattedContent);
     }
   };
+  const fetchingDataPhieuStoreAllTotal = async (CHINHANH) => {
+    const currentDate = new Date();
+    let arrayA = [];
+
+    // Lấy thông tin về ngày, giờ, phút, giây và milliseconds
+    const year = currentDate.getFullYear();
+    for (let index = 1; index <= 12; index++) {
+      let handle = {
+        storeID: CHINHANH,
+        thoidiem: `${year}-${index.toString().padStart(2, "0")}`,
+      };
+
+      let check = await GET_ALL_MONEY_BY_STOREID_THOIDIEM_OF_PHIEUSTORE(handle);
+
+      arrayA = arrayA.concat(check.All_DOANHTHU);
+    }
+
+    setMockdataNhapKho(arrayA);
+  };
+
+  const fetchingDataAllTotal = async (CHINHANH) => {
+    const currentDate = new Date();
+    let arrayA = [];
+
+    // Lấy thông tin về ngày, giờ, phút, giây và milliseconds
+    const year = currentDate.getFullYear();
+    for (let index = 1; index <= 12; index++) {
+      let handle = {
+        storeID: CHINHANH,
+        thoidiem: `${year}-${index.toString().padStart(2, "0")}`,
+      };
+
+      let check = await GET_ALL_MONEY_BY_STOREID_THOIDIEM_OF_DOANHTHU(handle);
+
+      arrayA = arrayA.concat(check.All_DOANHTHU);
+    }
+
+    setMockdataBan(arrayA);
+  };
 
   const fetchingapi = async () => {
     await checkAccess();
     // await fetchingDebtor();
+
     await fetchingStore();
     await fetchingnoti();
-    await fetchingdoanhthu(chinhanhdau, formattedDate);
-    await fetchingCost(chinhanhdau, formattedDate);
-    await fetchingGetAllDEBTOR_by_STOREID_year_month(
-      chinhanhdau,
-      formattedDate
-    );
+
+    Promise.all([
+      await fetchingdoanhthu(chinhanhdau, formattedDate),
+      await fetchingCost(chinhanhdau, formattedDate),
+      await fetchingDataAllTotal(chinhanhdau),
+      await fetchingDataPhieuStoreAllTotal(chinhanhdau),
+      await fetchingGetAllDEBTOR_by_STOREID_year_month(
+        chinhanhdau,
+        formattedDate
+      ),
+    ]);
     setStatechinhanh(chinhanhdau);
   };
   const handle_getAllDoanhthu = async (e) => {
+    await fetchingDataAllTotal(e.target.value);
+    await fetchingDataPhieuStoreAllTotal(e.target.value);
     await fetchingdoanhthu(e.target.value, formattedDate);
     await fetchingCost(e.target.value, formattedDate);
     await fetchingGetAllDEBTOR_by_STOREID_year_month(
@@ -435,25 +491,7 @@ const Dashboard = () => {
             justifyContent="space-between"
             alignItems="center"
           >
-            <Header
-              title={i18n.t("DESDOASHBOARD")}
-              // subtitle={i18n.t("TONGDOANHTHU")}
-            />
-
-            {/* <Box>
-          <Button
-            sx={{
-              backgroundColor: colors.blueAccent[700],
-              color: colors.grey[100],
-              fontSize: "14px",
-              fontWeight: "bold",
-              padding: "10px 20px",
-            }}
-          >
-            <DownloadOutlinedIcon sx={{ mr: "10px" }} />
-            Download Reports
-          </Button>
-        </Box> */}
+            <Header title={i18n.t("DESDOASHBOARD")} />
           </Box>
 
           <Box mb="20px">
@@ -639,23 +677,7 @@ const Dashboard = () => {
                   >
                     {i18n.t("TONGQUAN")}
                   </Typography>
-                  {/* <Typography
-                    variant="h3"
-                    fontWeight="bold"
-                    color={colors.greenAccent[500]}
-                  >
-                    $59,342.32
-                    <Button>Month</Button>
-                    <Button>Day</Button>
-                  </Typography> */}
                 </Box>
-                {/* <Box>
-              <IconButton>
-                <DownloadOutlinedIcon
-                  sx={{ fontSize: "26px", color: colors.greenAccent[500] }}
-                />
-              </IconButton>
-            </Box> */}
               </Box>
               <Box height="250px" m="-20px 0 0 0">
                 <LineChart
@@ -739,8 +761,66 @@ const Dashboard = () => {
                 ))}
             </Box>
 
-            {/* ROW 3 */}
+            {/* ROW 4 */}
+            <Box
+              gridColumn="span 12"
+              gridRow="span 2"
+              height="410px"
+              backgroundColor={colors.primary[400]}
+            >
+              <Box
+                mt="25px"
+                p="0 30px"
+                display="flex "
+                justifyContent="space-between"
+                alignItems="center"
+              >
+                <Box>
+                  <Typography
+                    variant="h5"
+                    fontWeight="600"
+                    color={colors.grey[100]}
+                  >
+                    TỔNG QUAN SỐ TIỀN ĐÃ BÁN TỪ THÁNG 1 ~ 12 NĂM 2024
+                  </Typography>
+                </Box>
+              </Box>
+              <Box height="350px" m="20px 102px 0 0">
+                <PieChart mockdata={mockdataBan || []}></PieChart>
+              </Box>
+            </Box>
 
+            {/* ROW 5 */}
+            <Box
+              gridColumn="span 12"
+              gridRow="span 2"
+              height="410px"
+              mt="115px"
+              backgroundColor={colors.primary[400]}
+            >
+              <Box
+                mt="25px"
+                p="0 30px"
+                display="flex "
+                justifyContent="space-between"
+                alignItems="center"
+              >
+                <Box>
+                  <Typography
+                    variant="h5"
+                    fontWeight="600"
+                    color={colors.grey[100]}
+                  >
+                    TỔNG QUAN SỐ TIỀN NHẬP KHO TỪ THÁNG 1 ~ 12 NĂM 2024
+                  </Typography>
+                </Box>
+              </Box>
+              <Box height="350px" m="20px 102px 0 0">
+                <PieChart mockdata={mockdataNhapKho || []}></PieChart>
+              </Box>
+            </Box>
+
+            {/* ROW CHAT */}
             <Box
               className="chatbox"
               gridColumn="span 4"
@@ -795,23 +875,6 @@ const Dashboard = () => {
                 </label>
               </div>
             </Box>
-
-            {/* <Box
-              gridColumn="span 4"
-              gridRow="span 2"
-              backgroundColor={colors.primary[400]}
-            >
-              <Typography
-                variant="h5"
-                fontWeight="600"
-                sx={{ padding: "30px 30px 0 30px" }}
-              >
-                Sales Quantity
-              </Typography>
-              <Box height="250px" mt="-20px">
-                <BarChart isDashboard={true} />
-              </Box>
-            </Box> */}
           </Box>
         </Box>
       ) : (

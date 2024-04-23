@@ -30,11 +30,17 @@ export const ConvertStoreIdTONAME = (name) => {
   if (name === "STO9") {
     convert += "PHOTO TIME HÙNG VƯƠNG PLAZA";
   }
-  if (name === "STO10") {
+  if (name === "ST10") {
     convert += "PHOTO TIME Royal City";
   }
-  if (name === "STO11") {
+  if (name === "ST11") {
     convert += "PHOTO TIME THE LOOP";
+  }
+  if (name === "ST12") {
+    convert += "PHOTO TIME VINH";
+  }
+  if (name === "ST13") {
+    convert += "PHOTO TIME VINCOM METROPOLIS";
   }
   return convert;
 };
@@ -52,6 +58,8 @@ export const converToName = {
   ST09: "PHOTO TIME HÙNG VƯƠNG PLAZA",
   ST10: "PHOTO TIME Royal City",
   ST11: "PHOTO TIME THE LOOP",
+  ST12: "PHOTO TIME VINH ",
+  ST13: "PHOTO TIME VINCOM METROPOLIS",
   // Thêm các ánh xạ khác nếu cầ
 };
 
@@ -68,6 +76,8 @@ export const converToNameWithoutPTT = {
   HVP: " HÙNG VƯƠNG PLAZA",
   RY: " Royal City",
   IPH: " THE LOOP",
+  VINH: "VINH",
+  METRO: "VINCOM METROPOLIS",
   // Thêm các ánh xạ khác nếu cầ
 };
 export const Check_CCCD_To_Count_TimeKeep = {
@@ -92,6 +102,8 @@ export const converIdToCODE = {
   ST09: "HVP",
   ST10: "RY",
   ST11: "IPH",
+  ST12: "VINH",
+  ST13: "METRO",
   // Thêm các ánh xạ khác nếu cầ
 };
 export const converBranchIDTOStoreID = {
@@ -106,6 +118,8 @@ export const converBranchIDTOStoreID = {
   BT009: "ST09",
   BT010: "ST10",
   BT011: "ST11",
+  BT012: "ST12",
+  BT013: "ST13",
   BT00: "ST00",
   // Thêm các ánh xạ khác nếu cầ
 };

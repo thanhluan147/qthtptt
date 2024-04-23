@@ -17,7 +17,7 @@ import XUATKHO from "./scenes/xuatkho";
 import { ColorModeContext, useMode } from "./theme";
 import Calendar from "./scenes/calendar/calendar";
 import Login from "./scenes/login/LoginPage";
-import Father from "./FatherCoponent";
+import Father from "./FatherComponent";
 import Bills from "./scenes/bill";
 import DOANHTHU from "./scenes/doanhthu";
 import DEBTORS from "./scenes/debtor";
