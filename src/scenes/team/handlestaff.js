@@ -75,7 +75,8 @@ export const HandleDeletedStaffOff = async (req) => {
   const respod = await Axios.post(
     `${Url_BackEnd}/staffoff/deletedstaff`,
     {
-      id: req,
+      id: req.id,
+      branchID: req.branchID,
     },
     {
       headers: {

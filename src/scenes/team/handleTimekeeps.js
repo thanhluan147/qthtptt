@@ -85,6 +85,7 @@ export const HandleEditTimekeeps = async (req) => {
       reason: req.reason,
       startCheck: req.startCheck,
       endCheck: req.endCheck,
+      heso: req.heso,
       Total: req.Total,
     },
     {
@@ -102,7 +103,8 @@ export const HandleDeletedTime = async (req) => {
   const respod = await Axios.post(
     `${Url_BackEnd}/timekeep/deleted`,
     {
-      id: req,
+      id: req.id,
+      branchID: req.branchID,
     },
     {
       headers: {

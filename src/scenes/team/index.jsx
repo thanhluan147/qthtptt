@@ -178,7 +178,8 @@ const Team = () => {
           reason: item.reason,
           startCheck: item.startCheck,
           endCheck: item.endCheck,
-          Total: diffMilliseconds,
+          heso: item.heso,
+          Total: diffMilliseconds * item.heso,
         };
 
         await HandleEditTimekeeps(objUpdate);
@@ -348,6 +349,13 @@ const Team = () => {
       editable: true,
     },
     {
+      field: "heso",
+      headerName: `${i18n.t("OT_HESO")}`,
+      flex: 1,
+      cellClassName: "name-column--cell",
+      editable: true,
+    },
+    {
       field: "Total",
       headerName: `${i18n.t("OT_TONGSOGIOLAM").toLocaleUpperCase()}`,
       flex: 1,
@@ -410,11 +418,12 @@ const Team = () => {
           label: "Yes",
           onClick: async () => {
             try {
-              const dataDeleted = selectionModelOff.map(async (item) => {
+              const dataDeleted = selectRowOff.map(async (item) => {
                 await HandleDeletedStaffOff(item);
               });
               await Promise.all(dataDeleted);
               setSelectionModelOff([]);
+              setSelectRowOff([]);
               await fetchingGettAllStaftOff_by_branchID(statechinhanh);
               setIsloadingDeleted(false);
             } catch (error) {
@@ -440,7 +449,7 @@ const Team = () => {
         );
         return;
       }
-      const dataDeleted = selectionModelOff.map(async (item) => {
+      const dataDeleted = selectRowOff.map(async (item) => {
         await HandleDeletedStaffOff(item);
       });
 
@@ -500,6 +509,18 @@ const Team = () => {
         reason: allValues[0].reason.value,
       };
     }
+    if (allValues[0].heso && parseFloat(allValues[0].heso.value) > 1) {
+      updatedArray = {
+        ...updatedArray,
+        heso: parseFloat(allValues[0].heso.value),
+      };
+    }
+    // if (parseFloat(allValues[0].heso.value) <= 0) {
+    //   updatedArray = {
+    //     ...updatedArray,
+    //     heso: 1,
+    //   };
+    // }
 
     const index = stateTimekeep.findIndex((item) => item.id === keys[0]);
     if (index === -1) {
@@ -751,7 +772,7 @@ const Team = () => {
   };
   const HuyCong = async () => {
     try {
-      const promises = selectionModelTimeKeep.map(async (item) => {
+      const promises = selectedRowTimekeeps.map(async (item) => {
         await HandleDeletedTime(item);
       });
 
@@ -815,6 +836,7 @@ const Team = () => {
           TENNV: element.staffName,
           REASON: element.reason,
           UPDATEDATE: element.createDate.split("T")[0],
+          HESO: element.heso,
         };
         for (let i = 0; i < filterCheckElement.length; i++) {
           const arrayObject = filterCheckElement[i].Total;
@@ -827,6 +849,7 @@ const Team = () => {
             ...object,
             [`CHECKINT${i + 1}`]: filterCheckElement[i].startCheck,
             [`CHECKOUT${i + 1}`]: filterCheckElement[i].endCheck,
+
             [`TOTAL${i + 1}`]: parseFloat(
               totalHours + parseFloat((totalMinutes / 60).toFixed(2))
             ),
@@ -845,8 +868,10 @@ const Team = () => {
           TENNV: element.staffName,
           REASON: element.reason,
           UPDATEDATE: element.createDate.split("T")[0],
+          HESO: element.heso,
           CHECKIN: element.startCheck,
           CHECKOUT: element.endCheck,
+
           TONG: parseFloat(
             totalHours + parseFloat((totalMinutes / 60).toFixed(2))
           ),
@@ -863,9 +888,9 @@ const Team = () => {
     let addrow = [
       "CCCD",
       i18n.t("TNV_TEAM").toUpperCase(),
-
       i18n.t("GHICHU").toUpperCase(),
       i18n.t("TDT_TEAM").toUpperCase(),
+      i18n.t("OT_HESO").toUpperCase(),
     ];
     for (let index = 1; index <= maxRow; index++) {
       addrow.push(`CHECK IN ${index}`);
@@ -910,7 +935,7 @@ const Team = () => {
       { width: 15 },
     ];
 
-    var columnleter = "CDEFGHIJKLMNO";
+    var columnleter = "CDEFGHIJKLMNOPQ";
 
     // Định dạng cột B
     for (let index = 0; index < columnleter.length; index++) {
@@ -918,10 +943,10 @@ const Team = () => {
       column.alignment = { horizontal: "center", vertical: "middle" };
 
       if (
-        columnleter.charAt(index) === "G" ||
-        columnleter.charAt(index) === "J" ||
-        columnleter.charAt(index) === "M" ||
-        columnleter.charAt(index) === "P"
+        columnleter.charAt(index) === "H" ||
+        columnleter.charAt(index) === "K" ||
+        columnleter.charAt(index) === "N" ||
+        columnleter.charAt(index) === "Q"
       ) {
         column.font = {
           color: { argb: "008f00" },

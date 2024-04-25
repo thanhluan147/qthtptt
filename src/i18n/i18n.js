@@ -19,6 +19,7 @@ i18n.use(initReactI18next).init({
         OT_TONGSOGIOLAM: "Tổng số giờ làm",
         OT_NGAYCHAMCONG: "Ngày chấm công",
         OT_KHOIPHUCNV: "Khôi phục nhân viên",
+        OT_HESO: "Hệ số",
         //
         QLNV: "Quản lý nhân viên",
         QLCNHANH: "Quản Lý chi nhánh",
@@ -253,6 +254,7 @@ i18n.use(initReactI18next).init({
         OT_TAOBANGCHAMCONG: "출근부 만들기",
         OT_GIOVAO: "출근 시간",
         OT_GIORA: "퇴근 시간",
+        OT_HESO: "계수",
         OT_TONGSOGIOLAM: "총 근로 시간",
         OT_NGAYCHAMCONG: "출근일",
         OT_KHOIPHUCNV: "직원 복구",
