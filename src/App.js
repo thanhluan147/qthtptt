@@ -24,6 +24,7 @@ import DEBTORS from "./scenes/debtor";
 import ACCOUNT from "./scenes/account";
 import BRACNH from "./scenes/branch";
 import DETAILS from "./scenes/Details/details";
+import Testform from "./scenes/testform/testform";
 import ChamCong from "./scenes/chamcong/chamcong";
 function App() {
   const [theme, colorMode] = useMode();
@@ -33,7 +34,7 @@ function App() {
     <Routes>
       <Route
         path="/"
-        element={<Father childrend={<Dashboard></Dashboard>}></Father>}
+        element={<Father childrend={<Testform></Testform>}></Father>}
       />
       <Route
         path="/details"
