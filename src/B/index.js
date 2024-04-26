@@ -173,7 +173,7 @@ app.post(
   uploadCloud.single("file"),
   async (req, res) => {
     const filedata = req.file;
-    console.log("filedata " + filedata);
+    console.log("filedata " + JSON.stringify(filedata));
     if (!req.file) {
       res.json("NOT OK");
       // next(new Error("No file uploaded!"));
